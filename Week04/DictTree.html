@@ -1,0 +1,76 @@
+<script>
+  //　利用symbol不可重复的特点，处理字符串支持$的问题
+  let $ = Symbol("$")
+  class Trie {
+    constructor() {
+      this.root = Object.create(null);//可以用map
+    }
+
+    insert(word) {
+      let node = this.root;
+      for (let c of word) {
+        if (!node[c]) {
+          node[c] = Object.create(null);
+        }
+        node = node[c];
+      }
+      // 截止符
+      // if (!("$" in node)) {
+      //   node["$"] = 0;
+      // }
+      // node["$"]++;
+      if (!($ in node)) {
+        node[$] = 0;
+      }
+      node[$]++;
+
+    }
+
+    most() {
+      let max = 0;
+      let maxWord = null;
+      let visit = (node, word) => {
+        if (node[$] && node[$] > max) {
+          max = node[$];
+          maxWord = word;
+        }
+        for (let p in node) {
+          visit(node[p], word + p)
+        }
+      }
+      visit(this.root, "");
+      console.log(maxWord, max);
+
+    }
+
+    less() {
+      let min = 100000;
+      let minWord = null;
+      let visit = (node, word) => {
+        if (node[$] && node[$] < min) {
+          min = node[$];
+          minWord = word;
+        }
+        for (let p in node) {
+          visit(node[p], word + p)
+        }
+      }
+      visit(this.root, "");
+      console.log(minWord, min)
+    }
+  }
+
+  function randomWord(length) {
+    var s = "";
+    for (let i = 0; i < length; i++) {
+      s += String.fromCharCode(Math.random() * 26 + "a".charCodeAt(0));//a->97
+    }
+    return s;
+  }
+
+  let trie = new Trie();
+  for (let i = 0; i < 100000; i++) {
+    trie.insert(randomWord(4))
+  }
+
+</script>
