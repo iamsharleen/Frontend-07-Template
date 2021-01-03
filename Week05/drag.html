@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>拖拽</title>
+</head>
+
+<body>
+  <div id="dragble" style="width: 100px;height: 100px;background-color: pink;"></div>
+</body>
+
+</html>
+
+<script>
+  let dragble = document.getElementById("dragble");
+  //记录第一次拖拽后的位置
+  let baseX = 0, baseY = 0;
+
+  dragble.addEventListener("mousedown", (event) => {
+    //　鼠标起始点
+    let startX = event.clientX, startY = event.clientY;
+
+    let up = event => {
+      baseX = baseX + event.clientX - startX;
+      baseY = baseY + event.clientY - startY;
+      //不能用dragble
+      document.removeEventListener("mousemove", move);
+      document.removeEventListener("mouseup", up);
+    }
+    let move = event => {
+      //console.log(event)
+      //dragble.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`
+      dragble.style.transform = `translate(${baseX + event.clientX - startX}px, ${baseY + event.clientY - startY}px)`
+    }
+
+    document.addEventListener("mousemove", move);
+    document.addEventListener("mouseup", up);
+  })
+</script>

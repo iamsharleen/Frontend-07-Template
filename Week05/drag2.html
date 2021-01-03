@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>拖拽</title>
+</head>
+
+<body>
+  <div id="container">文字　文字　文字　文字　文字　文字　文字　文字　文字　文字　文字　
+    文字　文字　文字　文字　文字　文字　文字　文字　
+    文字　文字　文字　文字　文字　文字　文字　文字　
+    文字　文字　文字　文字　文字　文字　文字　文字　
+    文字　文字　文字　文字　文字　文字　文字　文字　
+    文字　文字　文字　文字　文字　文字　文字　文字　　
+    文字　文字　文字　文字　文字　文字　文字　文字　
+    文字　文字　文字　文字　文字　文字　文字　文字　
+    文字　文字　文字　文字　文字　文字　文字　文字　
+    文字　文字　文字　文字　文字　文字　文字　文字　
+    文字　文字　文字　文字　文字　文字　文字　文字　
+    文字　文字　文字　文字　文字　文字　文字　文字　
+    文字　文字　文字　文字　文字　文字　文字　文字　
+    文字　文字　文字　文字　文字　文字　文字　文字　
+    文字　文字　文字　文字　文字　文字　文字　文字　
+    文字　文字　文字　文字　文字　文字　文字　文字　
+    文字　文字　文字　文字　文字　文字　文字　文字　　
+    文字　文字　文字　文字　文字　文字　文字　文字　
+    文字　文字　文字　文字　文字　文字　文字　文字　
+    文字　文字　文字　文字　文字　文字　文字　文字　
+    文字　文字　文字　文字　文字　文字　文字　文字　
+    文字　文字　文字　文字　文字　文字　文字　文字　
+    文字　文字　文字　文字　文字　文字　文字　文字
+  </div>
+  <div id="dragble" style="display:inline-block;width: 100px;height: 100px;background-color: pink;"></div>
+</body>
+
+</html>
+
+<script>
+  let dragble = document.getElementById("dragble");
+  //记录第一次拖拽后的位置
+  let baseX = 0, baseY = 0;
+
+  dragble.addEventListener("mousedown", (event) => {
+    //　鼠标起始点
+    let startX = event.clientX, startY = event.clientY;
+
+    let up = event => {
+      baseX = baseX + event.clientX - startX;
+      baseY = baseY + event.clientY - startY;
+      //不能用dragble
+      document.removeEventListener("mousemove", move);
+      document.removeEventListener("mouseup", up);
+    }
+    let move = event => {
+      //console.log(event)
+      //dragble.style.transform = `translate(${event.clientX}px, ${event.clientY}px)`
+      //dragble.style.transform = `translate(${baseX + event.clientX - startX}px, ${baseY + event.clientY - startY}px)`
+
+      let range = getNearest(event.clientX, event.clientY);
+      range.insertNode(dragble);
+    }
+
+    document.addEventListener("mousemove", move);
+    document.addEventListener("mouseup", up);
+  })
+
+  let ranges = [];
+
+  let container = document.getElementById("container");
+  for (let i = 0; i < container.childNodes[0].textContent.length; i++) {
+    let range = document.createRange();
+    range.setStart(container.childNodes[0], i);
+    range.setEnd(container.childNodes[0], i);
+
+    console.log(range);
+    ranges.push(range);
+  }
+
+  //从ranges里面找到离point最近的点
+  function getNearest(x, y) {
+    let min = Infinity;
+    let nearest = null;
+
+    for (let range of ranges) {
+      let rect = range.getBoundingClientRect();
+      let distance = (rect.x - x) ** 2 + (rect.y - y) ** 2;
+      if (distance < min) {
+        nearest = range;
+        min = distance;
+      }
+    }
+    return nearest;
+  }
+
+  document.addEventListener("selectstart", event => event.preventDefault());
+</script>
