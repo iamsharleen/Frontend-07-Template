@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>选择器</title>
+  <style>
+  </style>
+</head>
+
+<body>
+  <!-- <div></div>
+  <div id="id" class="class"></div> -->
+  <div>
+    <span>
+      <div id="id" class="class"></div>
+    </span>
+  </div>
+  <p>这是段落标签</p>
+  <h3 class="h3">这是标题标签</h3>
+  <p>这是段落标签</p>
+  <p>这是段落标签</p>
+  <h4 class="h4">这是标题标签</h4>
+  <p>这是段落标签</p>
+  <p id="p4">这是标题标签</p>
+  <p>这是段落标签</p>
+  <!-- <div id="id" class="class"></div> -->
+</body>
+
+</html>
+
+
+
+<script>
+  /**
+   * 判断一个元素是否能够跟一个选择器相匹配
+   * 选择器：
+   * 1.　简单：tag, #id, .cls
+   * 2.　组合选择器
+   * 3.　复杂选择器：空格 > ~ +（TODO: ||，不支持混合）
+   * 
+   **/
+  function match(selector, element) {
+    let matched = false;
+    let selector_reg = /(\*)|(\w+)|(\.\w+)|(\#\w+)/g;
+    //拆分复杂选择器
+    if (selector.indexOf(">") > -1) {
+      let selector_array = selector.split(">");
+      let cur_ss = selector_array[selector_array.length - 1].match(selector_reg);
+      //判断当前元素
+      matched = matchElement(cur_ss, element);
+      if (matched) {
+        // 判断父元素
+        let parent_ss = selector_array[selector_array.length - 2].match(selector_reg);
+        matched = matchElement(parent_ss, element.parentNode);
+      }
+
+    } else if (selector.indexOf("+") > -1) {
+      let selector_array = selector.split("+");
+      let cur_ss = selector_array[selector_array.length - 1].match(selector_reg);
+      //判断当前元素
+      matched = matchElement(cur_ss, element);
+      // 判断相邻元素
+      if (matched) {
+        let pre_ss = selector_array[selector_array.length - 2].match(selector_reg);
+        matched = matchElement(pre_ss, element.previousElementSibling);
+      }
+
+
+    } else if (selector.indexOf("~") > -1) {
+      let selector_array = selector.split("~");
+      let selector_groups = [];
+      // array = [div, #id.class];
+      for (let i = 0; i < selector_array.length; i++) {
+        let ss = selector_array[i].match(selector_reg);
+        selector_groups.push(ss);
+      }
+      //先判断当前元素
+      let cur_selector = selector_groups[selector_groups.length - 1];
+      matched = matchElement(cur_selector, element);
+      //再判断上层元素
+      if (matched) {
+        let j = selector_groups.length - 2;
+        element = element.previousElementSibling;
+        while (j >= 0) {
+          matched = matchElement(selector_groups[j], element);
+          if (matched) {
+            j--;
+          }
+          element = element.previousElementSibling;
+        }
+      }
+
+    } else {
+      //后代
+      let selector_array = selector.split(" ");
+      let selector_groups = [];
+      // array = [div, #id.class];
+      for (let i = 0; i < selector_array.length; i++) {
+        let ss = selector_array[i].match(selector_reg);
+        selector_groups.push(ss);
+      }
+      //先判断当前元素
+      let cur_selector = selector_groups[selector_groups.length - 1];
+      matched = matchElement(cur_selector, element);
+      //再判断上层元素
+      if (matched) {
+        let j = selector_groups.length - 2;
+        element = element.parentNode;
+        while (j >= 0) {
+          matched = matchElement(selector_groups[j], element);
+          if (matched) {
+            j--;
+          }
+          element = element.parentNode;
+        }
+      }
+    }
+    return matched;
+  }
+
+
+  function matchElement(selectors, element) {
+    let hasId = false, hasClass = false, hasTag = false;
+    let idMatch = false, clsMatch = false, tagMatch = false;
+
+    //[#id,.cls1,.cls2]   id="id",class="cls1 cls2"
+    for (let i = 0; i < selectors.length; i++) {
+      let selector = selectors[i];
+      if (selector.charAt(0) === "*") {
+        return true;
+      } else if (selector.charAt(0) === "#") {// #id
+        hasId = true;
+        if (element.id === selector.replace("#", '')) {
+          idMatch = true;
+        }
+      } else if (selector.charAt(0) === ".") {// .cls
+        hasClass = true;
+        let classList = element.classList;
+        for (let j = 0; j < classList.length; j++) {
+          if (classList[j] === selector.replace(".", '')) {
+            clsMatch = true;
+            break;
+          }
+        }
+
+      } else {
+        hasTag = true;
+        if (element.tagName.toUpperCase() === selector.toUpperCase()) {
+          tagMatch = true;
+        }
+      }
+    }
+
+    let res = true;
+    if ((hasId && !idMatch) || (hasClass && !clsMatch) || (hasTag && !tagMatch)) {
+      res = false;
+    }
+    return res;
+  }
+
+  console.log(match("div #id.class", document.getElementById("id")));
+  console.log(match("#id.class", document.getElementById("id")));
+  console.log(match(".h3~#p4", document.getElementById("p4")));
+  console.log(match("p", document.getElementById("p4")));
+
+</script>
