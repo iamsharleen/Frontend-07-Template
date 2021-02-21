@@ -28,9 +28,9 @@
 
 
 ---
-#　总结
+# 总结
 
-##　浏览器
+## 浏览器
 1. HTTP请求：URL --> HTML
     * 状态机
     * HTTP协议：request/response
