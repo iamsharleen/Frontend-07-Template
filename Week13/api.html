@@ -1,0 +1,163 @@
+<script>
+  let names = Object.getOwnPropertyNames(window);
+  function filterOut(names, props) {
+    let set = new Set();
+    props.forEach(o => { set.add(o) });
+    return names.filter(e => !set.has(e));
+  }
+  //ECMA
+  {
+    let js = new Set();
+    let objects = ["Infinity", "NaN", "undefined", "globalThis", "escape", "unescape", "eval", "uneval", "isFinite", "isNaN", "parseFloat", "parseInt", "decodeURI", "decodeURIComponent", "encodeURI", "encodeURIComponent", "Object", "Function", "Boolean", "Symbol", "Error", "AggregateError", "EvalError", "InternalError", "RangeError", "ReferenceError", "SyntaxError", "TypeError", "URIError", "Number", "BigInt", "Math", "Date", "String", "RegExp", "Array", "Int8Array", "Uint8Array", "Uint8ClampedArray", "Int16Array", "Uint16Array", "Int32Array", "Uint32Array", "Float32Array", "Float64Array", "BigInt64Array", "BigUint64Array", "Map", "Set", "WeakMap", "WeakSet", "ArrayBuffer", "SharedArrayBuffer", "Atomics", "DataView", "JSON", "Promise", "Generator", "GeneratorFunction", "AsyncFunction", "Reflect", "Proxy", "arguments", "WebAssembly"];
+    objects.forEach(o => js.add(o));
+    names = names.filter(e => !js.has(e));
+  }
+  //Subclass of Node
+  names = names.filter(e => {
+    try {
+      return !(window[e].prototype instanceof Node);
+    } catch (err) {
+      return true;
+    }
+  }).filter(e => e != "Node");
+
+  //https://html.spec.whatwg.org
+  {
+    let windowprops = new Set();
+    objects = ["variable", "object", "optionalArgument", "method", "element", "collection", "index", "name", "length", "item", "namedItem", "radioNodeList", "value", "before", "add", "remove", "selectedIndex", "strings", "string", "contains", "document", "referrer", "cookie", "lastModified", "readyState", "head", "title", "body", "images", "embeds", "plugins", "links", "forms", "scripts", "getElementsByName", "currentScript", "dir", "style", "dataset", "innerText", "text", "a", "hyperlink", "href", "origin", "protocol", "username", "password", "host", "hostname", "port", "pathname", "search", "hash", "image", "width", "height", "naturalWidth", "naturalHeight", "complete", "currentSrc", "decode", "Image", "video", "videoWidth", "videoHeight", "audio", "url", "Audio", "track", "NONE", "LOADING", "LOADED", "ERROR", "media", "error", "code", "message",
+      "source", "srcObject", "type", "canPlayType", "networkState", "MimeTypeArray", "Navigator", "load", "buffered", "duration", "currentTime", "paused", "ended", "defaultPlaybackRate", "playbackRate", "preservesPitch", "played", "play", "pause", "time", "seeking", "seekable", "fastSeek", "audioTracks", "videoTracks", "audioTrack", "videoTrack", "id", "getTrackById", "kind", "label", "language", "enabled", "selected", "n", "textTrack", "textTracks", "textTracks", "cue", "addTextTrack", "inBandMetadataTrackDispatchType", "mode", "disabled", "hidden", "showing", "cues", "activeCues", "addCue", "removeCue", "cuelist", "getCueById", "volume", "muted", "start", "end", "event", "map", "areas", "doc", "iframe", "embed", "getSVGDocument", "table", "caption", "thead", "tfoot", "tbody", "tr", "createCaption", "deleteCaption", "tHead", "createTHead", "deleteTHead", "tFoot", "createTFoot",
+      "deleteTFoot", "tBodies", "createTBody", "rows", "insertRow", "deleteRow", "cell", "rowIndex", "sectionRowIndex", "cells", "insertCell", "deleteCell", "cellIndex", "form", "submitter", "elements", "submit", "requestSubmit", "reset", "checkValidity", "reportValidity", "control", "labels", "input", "indeterminate", "files", "checked", "valueAsDate", "valueAsNumber", "stepUp", "stepDown", "list", "select", "options", "selectedOptions", "datalist", "option", "defaultSelected", "Option", "textarea", "output", "defaultValue", "progress", "position", "fieldset", "legend", "direction", "replacement", "selectionMode", "selectionStart", "selectionEnd", "selectionDirection", "setSelectionRange", "setRangeText", "preserve", "valid", "willValidate", "setCustomValidity", "validity", "valueMissing", "typeMismatch", "patternMismatch", "tooLong", "tooShort", "rangeUnderflow", "rangeOverflow", "stepMismatch", "badInput", "customError", "validationMessage", "formData", "dialog", "result", "show", "showModal", "close", "returnValue", "script", "template", "content", "slot", "assignedNodes", "assignedElements", "context", "canvas", "contextId", "getContext", "quality", "callback", "toDataURL", "toBlob", "transferControlToOffscreen", "attributes", "alpha", "desynchronized", "getContextAttributes", "save", "restore", "styles", "segments", "lineWidth", "lineCap", "lineJoin", "miterLimit", "setLineDash", "getLineDash", "lineDashOffset", "font", "textAlign", "textBaseline", "x", "y", "path", "cpx", "cpy", "cp1x", "cp1y", "cp2x", "cp2y", "x1", "y1", "x2", "y2", "radius", "startAngle", "endAngle", "counterclockwise", "radiusX", "radiusY", "rotation", "w", "h", "moveTo", "closePath", "lineTo", "quadraticCurveTo", "bezierCurveTo", "arcTo", "arc", "ellipse", "rect", "transform", "Path2D", "addPath", "angle", "b", "c", "d", "e", "f", "matrix", "scale", "rotate", "translate", "getTransform", "setTransform", "resetTransform", "fillStyle", "strokeStyle", "gradient", "offset", "color", "x0", "y0", "r0", "r1", "addColorStop", "createLinearGradient", "createRadialGradient", "pattern", "repetition", "createPattern", "clearRect", "fillRect", "strokeRect", "maxWidth", "metrics", "fillText", "strokeText", "measureText", "actualBoundingBoxLeft", "actualBoundingBoxRight", "fontBoundingBoxAscent", "fontBoundingBoxDescent", "actualBoundingBoxAscent", "actualBoundingBoxDescent", "emHeightAscent", "emHeightDescent", "hangingBaseline", "alphabeticBaseline", "ideographicBaseline", "fillRule", "beginPath", "fill", "stroke", "clip", "isPointInPath", "isPointInStroke", "drawFocusIfNeeded", "scrollPathIntoView", "dx", "dy", "dw", "dh", "sx", "sy", "sw", "sh", "drawImage", "imagedata", "data", "dirtyX", "dirtyY", "dirtyWidth", "dirtyHeight", "ImageData", "createImageData", "getImageData", "putImageData", "globalAlpha", "globalCompositeOperation", "imageSmoothingEnabled", "imageSmoothingQuality", "shadowColor", "shadowOffsetX", "shadowOffsetY", "shadowBlur", "filter", "transferFromImageBitmap", "offscreenCanvas", "OffscreenCanvas", "promise", "convertToBlob", "transferToImageBitmap", "offscreenCanvasRenderingContext2D", "commit", "window", "constructor", "baseLocalName", "root", "customElements", "define", "get", "whenDefined", "upgrade", "attachInternals()", "internals", "shadowRoot", "state", "flags", "anchor", "setFormValue", "setValidity", "checkValidity()", "reportValidity()", "role", "aria*", "click", "documentOrShadowRoot", "activeElement", "hasFocus", "focus", "preventScroll", "blur", "contentEditable", "isContentEditable", "designMode", "spellcheck", "autocapitalize", "dataTransfer", "format", "DataTransfer", "dropEffect", "effectAllowed", "items", "setDragImage", "types", "getData", "setData", "clearData", "clear", "file", "getAsString", "getAsFile", "draggable", "top", "opener", "parent", "frameElement", "frames", "self", "defaultView", "target", "features", "open", "closed", "stop", "locationbar", "visible", "menubar", "personalbar", "scrollbars", "statusbar", "toolbar", "domain", "originAgentCluster", "delta", "history", "scrollRestoration", "go", "back", "forward", "pushState", "replaceState", "location", "assign", "replace", "reload", "ancestorOrigins", "oldURL", "newURL", "persisted", "modulePromise", "specifier", "isSecureContext", "crossOriginIsolated", "btoa", "atob", "write", "writeln", "parser", "DOMParser", "parseFromString", "handle", "handler", "timeout", "arguments", "setTimeout", "clearTimeout", "setInterval", "clearInterval", "queueMicrotask", "default", "alert", "confirm", "prompt", "print", "navigator", "appCodeName", "appName", "appVersion", "platform", "product", "productSub", "userAgent", "vendor", "vendorSub", "languages", "onLine", "scheme", "registerProtocolHandler", "unregisterProtocolHandler", "cookieEnabled", "imageBitmap", "createImageBitmap", "lastEventId", "ports", "EventSource", "withCredentials", "socket", "protocols", "reason", "WebSocket", "send", "bufferedAmount", "extensions", "binaryType", "blob", "arraybuffer", "wasClean", "targetOrigin", "transfer", "postMessage", "channel", "MessageChannel", "broadcastChannel", "BroadcastChannel", "workerGlobal", "urls", "importScripts", "dedicatedWorkerGlobal", "sharedWorkerGlobal", "worker", "scriptURL", "Worker", "terminate", "sharedWorker", "SharedWorker", "hardwareConcurrency", "worklet", "moduleURL", "addModule", "credentials", "storage", "key", "getItem", "setItem", "removeItem", "delete", "sessionStorage", "localStorage", "oldValue", "newValue", "storageArea", "CanvasRenderingContext2D", "CanvasPattern", "CanvasGradient", "TextTrackList", "TextTrackCueList", "TextTrackCue", "TextTrack", "BeforeUnloadEvent", "TimeRanges", "PromiseRejectionEvent"]
+    objects.forEach(o => windowprops.add(o));
+
+    names = names.filter(e => !windowprops.has(e));
+  }
+  // events
+  names = names.filter(e => !e.match(/^on/));
+  // webkit private
+  names = names.filter(e => !e.match(/^webkit/));
+  // Intl-ECMA402
+  names = names.filter(e => e != "Intl");
+  // khronos
+  //https://www.khronos.org/registry/webgl/specs/
+  names = filterOut(names, ["WebGLSampler", "WebGLObject", "WebGLQuery", "WebGLBuffer", "WebGLFramebuffer", "WebGLProgram", "WebGLRenderbuffer", "WebGLShader", "WebGLTexture", "WebGLUniformLocation", "WebGLActiveInfo", "WebGLShaderPrecisionFormat", "WebGLVertexArrayObject", "WebGLTransformFeedback", "WebGLSync", "WebGLContextEvent", "WebGL2RenderingContext", "WebGLRenderingContext"])
+
+  //whatwg
+  //https://encoding.spec.whatwg.org/
+  names = filterOut(names, ["TextDecoder", "TextEncoder", "TextDecoderStream", "TextEncoderStream"])
+  //https://streams.spec.whatwg.org/
+  names = filterOut(names, ["ReadableStream", "ReadableStreamGenericReader", "ReadableStreamDefaultReader", "ReadableStreamBYOBReader", "ReadableStreamDefaultController", "ReadableByteStreamController", "ReadableStreamBYOBRequest", "WritableStream", "WritableStreamDefaultWriter", "WritableStreamDefaultController", "TransformStream", "TransformStreamDefaultController", "ByteLengthQueuingStrategy", "CountQueuingStrategy"]);
+  //https://dom.spec.whatwg.org/
+  names = filterOut(names, ["Event", "CustomEvent", "EventTarget", "AbortController", "AbortSignal", "NodeList", "HTMLCollection", "MutationObserver", "MutationRecord", "Node", "Document", "DOMImplementation", "DocumentType", "DocumentFragment", "ShadowRoot", "Element", "NamedNodeMap", "Attr", "CharacterData", "Text", "CDATASection", "ProcessingInstruction", "Comment", "AbstractRange", "StaticRange", "Range", "NodeIterator", "TreeWalker", "NodeFilter", "DOMTokenList", "XPathResult", "XPathExpression", "XPathEvaluator"]);
+  //https://html.spec.whatwg.org/
+  names = filterOut(names, ["HTMLAllCollection", "HTMLFormControlsCollection", "HTMLOptionsCollection", "DOMStringList", "DocumentOrShadowRoot", "TrackEvent", "SubmitEvent", "FormDataEvent", "ImageBitmapRenderingContext", "OffscreenCanvas", "CustomElementRegistry", "ElementInternals", "DataTransfer", "DataTransferItemList", "DataTransferItem", "DragEvent", "History", "Location", "PopStateEvent", "HashChangeEvent", "PageTransitionEvent", "MessageEvent", "EventSource", "WebSocket", "CloseEvent", "WorkerGlobalScope", "DedicatedWorkerGlobalScope", "SharedWorkerGlobalScope", "Worker", "SharedWorker", "WorkerNavigator", "WorkerLocation", "Storage", "StorageEvent"]);
+  //https://xhr.spec.whatwg.org/
+  names = filterOut(names, ["XMLHttpRequest", "FormData", "ProgressEvent", "XMLHttpRequestEventTarget", "XMLHttpRequestUpload"])
+
+  // w3.org
+  //https://www.w3.org/TR/webaudio/
+  names = filterOut(names, ["BaseAudioContext", "AudioContext", "OfflineAudioContext", "OfflineAudioCompletionEvent", "AudioBuffer", "AudioNode", "AudioScheduledSourceNode", "AnalyserNode", "AudioBufferSourceNode", "AudioDestinationNode", "AudioListener", "AudioProcessingEvent", "BiquadFilterNode", "ChannelMergerNode", "ChannelSplitterNode", "ConstantSourceNode", "ConvolverNode", "DelayNode", "DynamicsCompressorNode", "GainNode", "IIRFilterNode", "MediaElementAudioSourceNode", "MediaStreamAudioDestinationNode", "MediaStreamAudioSourceNode", "MediaStreamTrackAudioSourceNode", "OscillatorNode", "PannerNode", "PeriodicWave", "ScriptProcessorNode", "StereoPannerNode", "WaveShaperNode", "AudioWorklet", "AudioWorkletGlobalScope", "AudioWorkletNode", "AudioWorkletProcessor", "AudioParamMap", "AudioParam",]);
+  //https://www.w3.org/TR/DOM-Level-3-XPath/xpath.html
+  names = filterOut(names, ["XPathException", "XPathExceptionCode", "XPathEvaluator", "XPathExpression", "XPathNSResolver", "XPathResult", "XPathNamespace"])
+  //https://www.w3.org/TR/navigation-timing/#performancetiming
+  names = filterOut(names, ["performance", "PerformanceTiming", "PerformanceEntry", "PerformanceObserver", "PerformanceObserverEntryList", "PerformanceServerTiming", "PerformanceLongTaskTiming", "PerformanceEventTiming", "EventCounts", "PerformanceMeasure", "PerformanceMark", "PerformanceNavigation", "PerformanceNavigationTiming", "PerformanceElementTiming", "PerformanceResourceTiming", "PerformancePaintTiming"])
+  //https://www.w3.org/TR/IndexedDB/#idbversionchangeevent
+  names = filterOut(names, ["IDBVersionChangeEvent", "IDBTransaction", "IDBRequest", "IDBOpenDBRequest", "IDBObjectStore", "IDBKeyRange", "IDBIndex", "IDBFactory", "IDBDatabase", "IDBCursorWithValue", "IDBCursor"]);
+  //https://www.w3.org/TR/SVG11/coords.html#InterfaceSVGTransform
+  names = filterOut(names, ["SVGTransform", "SVGTransformList", "SVGAnimatedTransformList", "SVGPreserveAspectRatio", "SVGAnimatedPreserveAspectRatio", "SVGRect", "SVGPointList", "SVGPoint",])
+  //https://w3c.github.io/mediacapture-main/#mediastreamtrack
+  names = filterOut(names, ["MediaStream", "MediaStreamTrack", "MediaStreamTrackEvent"]);
+  //https://w3c.github.io/webrtc-pc/#rtcstatsreport-object
+  names = filterOut(names, ["RTCTrackEvent", "RTCStatsReport", "RTCSessionDescription", "RTCSctpTransport", "RTCRtpTransceiver", "RTCRtpSender", "RTCRtpReceiver", "RTCPeerConnectionIceEvent", "RTCPeerConnectionIceErrorEvent", "RTCPeerConnection", "RTCIceCandidate", "RTCErrorEvent", "RTCError", "RTCEncodedVideoFrame", "RTCEncodedAudioFrame", "RTCDtlsTransport", "RTCDataChannelEvent", "RTCDataChannel", "RTCDTMFToneChangeEvent", "RTCDTMFSender", "RTCCertificate"])
+  //https://w3c.github.io/webauthn/#iface-pkcredential
+  names = filterOut(names, ["AuthenticatorAssertionResponse", "AuthenticatorAttestationResponse", "AuthenticatorResponse", "PublicKeyCredential", "Credential", "CredentialsContainer"]);
+  //https://w3c.github.io/mediacapture-fromelement/
+  names = filterOut(names, ["CanvasCaptureMediaStreamTrack",]);
+  //https://w3c.github.io/mediacapture-record/#mediarecorder-api
+  names = filterOut(names, ["MediaRecorder", "MimeType",]);
+  //https://w3c.github.io/mediacapture-main/#dom-mediadeviceinfo
+  names = filterOut(names, ["MediaDeviceInfo", "MediaDevices",]);
+  //https://w3c.github.io/encrypted-media/
+  names = filterOut(names, ["MediaKeyMessageEvent", "MediaKeySession", "MediaKeyStatusMap", "MediaKeySystemAccess", "MediaKeys",]);
+  //https://w3c.github.io/presentation-api/
+  names = filterOut(names, ["Presentation", "PresentationAvailability", "PresentationConnection", "PresentationConnectionAvailableEvent", "PresentationConnectionCloseEvent", "PresentationConnectionList", "PresentationReceiver", "PresentationRequest"]);
+  //https://w3c.github.io/uievents
+  names = filterOut(names, ["UIEvent", "KeyboardEvent", "WheelEvent", "MutationEvent", "FocusEvent", "CompositionEvent", "InputEvent",]);
+  //https://w3c.github.io/permissions/
+  names = filterOut(names, ["PermissionStatus", "Permissions"]);
+  //https://w3c.github.io/payment-request
+  names = filterOut(names, ["PaymentRequest", "PaymentResponse", "PaymentMethodChangeEvent", "PaymentRequestUpdateEvent",]);
+  //https://w3c.github.io/picture-in-picture/
+  names = filterOut(names, ["PictureInPictureEvent", "PictureInPictureWindow",]);
+  //https://w3c.github.io/deviceorientation/
+  names = filterOut(names, ["DeviceMotionEvent", "DeviceMotionEventAcceleration", "DeviceMotionEventRotationRate", "DeviceOrientationEvent",]);
+  // https://w3c.github.io/longtasks/#sec-TaskAttributionTiming
+  names = filterOut(names, ["TaskAttributionTiming",]);
+  //https://w3c.github.io/pointerevents/#pointerevent-interface
+  names = filterOut(names, ["PointerEvent",]);
+  //https://w3c.github.io/reporting/#interface-reporting-observer
+  names = filterOut(names, ["ReportingObserver",]);
+  //https://w3c.github.io/screen-orientation/#screenorientation-interface
+  names = filterOut(names, ["ScreenOrientation",]);
+  //https://w3c.github.io/mediasession/#the-mediametadata-interface
+  names = filterOut(names, ["MediaMetadata", "MediaSession",]);
+  //https://w3c.github.io/ServiceWorker/#serviceworker
+  names = filterOut(names, ["ServiceWorker", "ServiceWorkerContainer", "ServiceWorkerRegistration",]);
+  //https://w3c.github.io/IntersectionObserver/#intersection-observer-entry
+  names = filterOut(names, ["IntersectionObserverEntry", "IntersectionObserver",]);
+  //https://w3c.github.io/selection-api/#selection-interface
+  names = filterOut(names, ["Selection",]);
+  //https://drafts.csswg.org/css-conditional-3
+  names = filterOut(names, ["CSSSupportsRule", "CSSConditionRule",]);
+  //https://drafts.csswg.org/web-animations-1/
+  names = filterOut(names, ["AnimationEvent", "CSSAnimation"]);
+  //https://drafts.csswg.org/css-animations-1/
+  names = filterOut(names, ["AnimationEffect", "Animation", "AnimationPlaybackEvent", "AnimationTimeline",]);
+  //https://drafts.csswg.org/css-conditional-3
+  names = filterOut(names, ["CSSSupportsRule", "CSSConditionRule"]);
+  //https://drafts.csswg.org/cssom/
+  names = filterOut(names, ["MediaList", "StyleSheet", "CSSStyleSheet", "StyleSheetList", "LinkStyle", "CSSRuleList", "CSSRule", "CSSStyleRule", "CSSImportRule", "CSSGroupingRule", "CSSMediaRule", "CSSPageRule", "CSSMarginRule", "CSSNamespaceRule", "CSSFontFaceRule", "CSSKeyframesRule", "CSSKeyframeRule", "CSSStyleDeclaration"]);
+  //https://drafts.csswg.org/cssom-view/
+  names = filterOut(names, ["Window", "Screen", "matchMedia", "MediaQueryList", "moveTo", "moveBy", "resizeTo", "resizeBy", "innerWidth", "innerHeight", "scrollX", "pageXOffset", "scrollY", "pageYOffset", "screenX", "screenY", "screenLeft", "screenTop", "outerWidth", "outerHeight", "devicePixelRadio", "Element", "scrollIntoView", "scroll", "scrollTo", "scrollBy", "scrollTop", "scrollLeft", "scrollWidth", "scrollHeight", "clientTop", "clientLeft", "clientWidth", "clientHeight", "MouseEvent", "MediaQueryListEvent", "devicePixelRatio",])
+  //https://drafts.css-houdini.org/css-typed-om-1/
+  names = filterOut(names, ["StylePropertyMapReadOnly", "StylePropertyMap",]);
+  //https://drafts.css-houdini.org/css-typed-om-1
+  names = filterOut(names, ["CSSVariableReferenceValue", "CSSUnparsedValue", "CSSStyleValue", "CSSImageValue", "CSSTransformValue", "CSSTransformComponent", "CSSTranslate", "CSSNumericValue", "CSSNumericArray", "CSSMatrixComponent", "CSSMathValue", "CSSMathSum", "CSSMathProduct", "CSSMathNegate", "CSSMathMin", "CSSMathMax", "CSSMathInvert", "CSSKeywordValue", "CSSUnitValue", "CSSPerspective", "CSSRotate", "CSSScale", "CSSSkewY", "CSSSkewX", "CSSSkew"])
+  //https://wicg.github.io/netinfo/#networkinformation-interface
+  names = filterOut(names, ["NetworkInformation",]);
+  // https://wicg.github.io/layout-instability/#layoutshiftattribution
+  names = filterOut(names, ["LayoutShiftAttribution", "LayoutShift",]);
+  //https://wicg.github.io/cookie-store/
+  names = filterOut(names, ["CookieChangeEvent", "CookieStore", "CookieStoreManager"]);
+  //https://wicg.github.io/file-system-access/#api-filesystemdirectoryhandle
+  names = filterOut(names, ["FileSystemDirectoryHandle", "FileSystemFileHandle", "FileSystemHandle", "FileSystemWritableFileStream", "showOpenFilePicker", "showSaveFilePicker",]);
+  //https://wicg.github.io/webusb/#usbalternateinterface
+  names = filterOut(names, ["USB", "USBAlternateInterface", "USBConfiguration", "USBConnectionEvent", "USBDevice", "USBEndpoint", "USBInTransferResult", "USBInterface", "USBIsochronousInTransferPacket", "USBIsochronousInTransferResult", "USBIsochronousOutTransferPacket", "USBIsochronousOutTransferResult", "USBOutTransferResult"]);
+  //https://wicg.github.io/background-sync/spec/#sync-manager-interface
+  names = filterOut(names, ["SyncManager"])
+  //https://wicg.github.io/speech-api/
+  names = filterOut(names, ["SpeechSynthesisErrorEvent", "SpeechSynthesisEvent", "SpeechSynthesisUtterance", "speechSynthesis",]);
+  //https://wicg.github.io/web-locks/#api-lock-manager
+  names = filterOut(names, ["Lock", "LockManager"]);
+  //https://svgwg.org/svg2-draft/types.html
+  names = filterOut(names, ["SVGElement", "SVGGraphicsElement", "SVGGeometryElement", "SVGNumber", "SVGLength", "SVGAngle", "SVGNumberList", "SVGLengthList", "SVGStringList", "SVGAnimatedBoolean", "SVGAnimatedEnumeration", "SVGAnimatedInteger", "SVGAnimatedNumber", "SVGAnimatedLength", "SVGAnimatedAngle", "SVGAnimatedString", "SVGAnimatedRect", "SVGAnimatedNumberList", "SVGAnimatedLengthList", "SVGUnitTypes",]);
+  //https://immersive-web.github.io/hit-test/
+  names = filterOut(names, ["XRHitTestResult", "XRHitTestSource", "XRRay", "XRTransientInputHitTestResult", "XRTransientInputHitTestSource"]);
+  //https://immersive-web.github.io/webxr/
+  names = filterOut(names, ["XRSystem", "XRFrame", "XRSpace", "XRReferenceSpace", "XRBoundedReferenceSpace", "XRView", "XRViewport", "XRRigidTransform", "XRPose", "XRViewerPose", "XRInputSourceArray", "XRInputSource", "XRLayer", "XRWebGLLayer", "XRSessionEvent", "XRInputSourceEvent", "XRInputSourcesChangeEvent", "XRReferenceSpaceEvent", "XRRenderState", "XRSession"]);
+  //https://webbluetoothcg.github.io/web-bluetooth/#bluetoothdevice
+  names = filterOut(names, ["Bluetooth", "BluetoothCharacteristicProperties", "BluetoothDevice", "BluetoothRemoteGATTCharacteristic", "BluetoothRemoteGATTDescriptor", "BluetoothRemoteGATTServer", "BluetoothRemoteGATTService", "BluetoothUUID"])
+  //https://drafts.fxtf.org/geometry/#DOMRect
+  names = filterOut(names, ["DOMStringMap", "DOMRectReadOnly", "DOMRectList", "DOMRect", "DOMQuad", "DOMPointReadOnly", "DOMPoint", "DOMMatrixReadOnly", "DOMMatrix", "DOMException", "WebKitCSSMatrix"]);
+  //https://webaudio.github.io/web-midi-api/#midiinputmap-interface
+  names = filterOut(names, ["MIDIAccess", "MIDIConnectionEvent", "MIDIInput", "MIDIInputMap", "MIDIMessageEvent", "MIDIOutput", "MIDIOutputMap", "MIDIPort",]);
+
+  //Other
+  names = filterOut(names, ["XRDOMOverlayState", "XRAnchor", "XRAnchorSet", "BeforeInstallPromptEvent", "XSLTProcessor", "showDirectoryPicker", "PaymentInstruments", "PaymentManager", "RemotePlayback", "BackgroundFetchManager", "BackgroundFetchRecord", "BackgroundFetchRegistration",
+    "MediaError", "MediaEncryptedEvent", "MediaCapabilities", "FragmentDirective",]);
+  //Deprecated
+  names = filterOut(names, ["CSSPositionValue", "MediaStreamEvent", "DOMError", "captureEvents", "SVGMatrix"]);
+
+  console.log(names.length);
+  console.log(JSON.stringify(names));
+
+</script>
