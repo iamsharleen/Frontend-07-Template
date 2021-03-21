@@ -1,0 +1,12 @@
+<body oncontextmenu="event.preventDefault()"></body>
+
+<script type="module">
+  import { enableGuesture } from './guesture2.js'
+
+  enableGuesture(document.documentElement);
+
+  document.documentElement.addEventListener('tap', () => {
+    console.log("tap event trigger...")
+  })
+
+</script>
