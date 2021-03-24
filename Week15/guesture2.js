@@ -67,7 +67,7 @@ export class Listener {
       for (let touch of e.changedTouches) {
         let context = Object.create(null);
         contexts.set(touch.identifier, context);
-        start(touch, context);
+        recognizer.start(touch, context);
       }
     });
 
@@ -75,7 +75,7 @@ export class Listener {
       //console.log(e.changedTouches)
       for (let touch of e.changedTouches) {
         let context = contexts.get(touch.identifier);
-        move(touch, context);
+        recognizer.move(touch, context);
       }
     });
 
@@ -83,8 +83,8 @@ export class Listener {
       //console.log(e.changedTouches)
       for (let touch of e.changedTouches) {
         let context = contexts.get(touch.identifier);
-        end(touch), context;
-        contexts.delete(ouch.identifier);
+        recognizer.end(touch, context);
+        contexts.delete(touch.identifier);
       }
     });
 
@@ -92,7 +92,7 @@ export class Listener {
       //console.log(e.changedTouches)
       for (let touch of e.changedTouches) {
         let context = contexts.get(touch.identifier);
-        cancel(touch), context;
+        recognizer.cancel(touch), context;
         contexts.delete(ouch.identifier);
       }
     });
@@ -199,7 +199,7 @@ export class Recognizer {
     }
 
     if (context.isPan) {
-      this.dispatcher.dispatch("panned", {
+      this.dispatcher.dispatch("panend", {
         startX: context.startX,
         startY: context.startY,
         clientX: point.clientX,
@@ -213,7 +213,6 @@ export class Recognizer {
     clearTimeout(context.handler);
     this.dispatcher.dispatch("cancel", {})
   }
-
 }
 
 // dispatch 派发事件
