@@ -83,8 +83,10 @@ export class Listener {
       //console.log(e.changedTouches)
       for (let touch of e.changedTouches) {
         let context = contexts.get(touch.identifier);
-        recognizer.end(touch, context);
-        contexts.delete(touch.identifier);
+
+        recognizer.end(touch), context;
+        contexts.delete(ouch.identifier);
+
       }
     });
 
