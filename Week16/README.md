@@ -62,6 +62,10 @@ State | F | F | F | T
 Config | F | T | T | F
 
 用Symbol实现私有化
+```
+export let STATE = Symbol("state");
+export let ATTRIBUTE = Symbol("attributes");
+```
 
 **Children**
 * Content
@@ -212,3 +216,7 @@ class List extends Component {
 
 export default List;
 ```
+
+## 难点
+1. CSS tranform & transition　& translate属性
+2. 元素位置计算
